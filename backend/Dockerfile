@@ -10,14 +10,12 @@ ENV PYTHONUNBUFFERED=1
 #     gcc \
 #     && rm -rf /var/lib/apt/lists/*
 
-# 更换阿里云apt源（Ubuntu/Debian通用）
-RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
-    && sed -i 's/security.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
-    && apt-get clean \
+RUN echo "deb http://mirrors.aliyun.com/debian/ bullseye main contrib non-free" > /etc/apt/sources.list \
+    && echo "deb http://mirrors.aliyun.com/debian/ bullseye-updates main contrib non-free" >> /etc/apt/sources.list \
+    && echo "deb http://mirrors.aliyun.com/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list \
     && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        gcc \
-    && rm -rf /var/lib/apt/lists/*    
+    && apt-get install -y --no-install-recommends gcc \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
