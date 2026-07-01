@@ -3,6 +3,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { siteConfigApi, bannerApi, uploadApi } from '@/admin/api'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Edit, Delete, Upload, Sort } from '@element-plus/icons-vue'
+import { parseI18nField } from '@/utils/i18n'
 
 const loading = ref(false)
 const saving = ref(false)
@@ -20,7 +21,8 @@ const configForm = reactive({
   site_title: '',
   keywords: '',
   description: '',
-  company_name: '',
+  company_name_zh: '',
+  company_name_en: '',
   phone: '',
   email: '',
   address: '',
@@ -49,7 +51,22 @@ async function loadConfig() {
   try {
     const res = await siteConfigApi.get()
     if ((res.code === 200 || res.code === 0) && res.data) {
-      Object.assign(configForm, res.data)
+      const data = res.data
+      const companyNameI18n = data.company_name_i18n || parseI18nField(data.company_name)
+      configForm.site_name = data.site_name
+      configForm.site_title = data.site_title
+      configForm.keywords = data.keywords
+      configForm.description = data.description
+      configForm.company_name_zh = companyNameI18n['zh-CN'] || companyNameI18n['zh'] || ''
+      configForm.company_name_en = companyNameI18n['en-US'] || companyNameI18n['en'] || ''
+      configForm.phone = data.phone
+      configForm.email = data.email
+      configForm.address = data.address
+      configForm.about_us = data.about_us
+      configForm.facebook = data.facebook
+      configForm.twitter = data.twitter
+      configForm.linkedin = data.linkedin
+      configForm.instagram = data.instagram
     }
   } catch (error) {
     console.error('获取网站配置失败:', error)
@@ -61,7 +78,25 @@ async function loadConfig() {
 async function handleSave() {
   saving.value = true
   try {
-    const res = await siteConfigApi.update(configForm)
+    const submitData = {
+      site_name: configForm.site_name,
+      site_title: configForm.site_title,
+      keywords: configForm.keywords,
+      description: configForm.description,
+      company_name: {
+        'zh-CN': configForm.company_name_zh,
+        'en-US': configForm.company_name_en
+      },
+      phone: configForm.phone,
+      email: configForm.email,
+      address: configForm.address,
+      about_us: configForm.about_us,
+      facebook: configForm.facebook,
+      twitter: configForm.twitter,
+      linkedin: configForm.linkedin,
+      instagram: configForm.instagram
+    }
+    const res = await siteConfigApi.update(submitData)
     if (res.code === 200 || res.code === 0) {
       ElMessage.success('保存成功')
     }
@@ -243,23 +278,30 @@ onMounted(() => {
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="公司名称">
-                  <el-input v-model="configForm.company_name" placeholder="请输入公司名称" />
+                <el-form-item label="公司名称(中文)">
+                  <el-input v-model="configForm.company_name_zh" placeholder="请输入中文公司名称" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="联系电话">
-                  <el-input v-model="configForm.phone" placeholder="请输入联系电话" />
+                <el-form-item label="公司名称(英文)">
+                  <el-input v-model="configForm.company_name_en" placeholder="请输入英文公司名称" />
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
+                <el-form-item label="联系电话">
+                  <el-input v-model="configForm.phone" placeholder="请输入联系电话" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
                 <el-form-item label="邮箱">
                   <el-input v-model="configForm.email" placeholder="请输入联系邮箱" />
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="24">
                 <el-form-item label="地址">
                   <el-input v-model="configForm.address" placeholder="请输入地址" />
                 </el-form-item>
@@ -365,7 +407,7 @@ onMounted(() => {
                   </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="140" fixed="right" align="center">
+              <el-table-column label="操作" width="180" fixed="right" align="center">
                 <template #default="{ row }">
                   <el-button type="primary" link :icon="Edit" @click="handleEditBanner(row)">编辑</el-button>
                   <el-button type="danger" link :icon="Delete" @click="handleDeleteBanner(row.id)">删除</el-button>

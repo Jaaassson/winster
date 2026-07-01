@@ -32,7 +32,7 @@ def init_data():
             site_title=json.dumps({"zh-CN": "Winster外贸 - 专业的产品供应商", "en-US": "Winster Trading - Professional Product Supplier"}, ensure_ascii=False),
             keywords=json.dumps({"zh-CN": "外贸,产品,批发,采购", "en-US": "trade,products,wholesale,sourcing"}, ensure_ascii=False),
             description=json.dumps({"zh-CN": "专业的外贸供应商，提供优质产品和服务", "en-US": "Professional foreign trade supplier, providing quality products and services"}, ensure_ascii=False),
-            company_name="Winster Trading Co., Ltd.",
+            company_name=json.dumps({"zh-CN": "Winster外贸有限公司", "en-US": "Winster Trading Co., Ltd."}, ensure_ascii=False),
             phone="+86-xxx-xxxxxxx",
             email="info@winster.com",
             address=json.dumps({"zh-CN": "中国广东省深圳市", "en-US": "Shenzhen, Guangdong, China"}, ensure_ascii=False),

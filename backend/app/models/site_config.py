@@ -9,7 +9,7 @@ class SiteConfig(BaseModel):
     site_title = db.Column(db.Text)
     keywords = db.Column(db.Text)
     description = db.Column(db.Text)
-    company_name = db.Column(db.String(255))
+    company_name = db.Column(db.Text)
     phone = db.Column(db.String(50))
     email = db.Column(db.String(100))
     address = db.Column(db.Text)

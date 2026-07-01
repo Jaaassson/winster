@@ -1,4 +1,5 @@
-FROM python:3.10-slim
+# FROM python:3.10-slim
+FROM swr.cn-north-4.myhuaweicloud.com/library/python:3.10-slim
 
 WORKDIR /app
 
