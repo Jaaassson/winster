@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: winster-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - ./backend/app/static:/app/static:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - winster-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: winster-backend
+    expose:
+      - "5000"
+    volumes:
+      - ./backend:/app
+      - ./backend/app/static/uploads:/app/app/static/uploads
+      - ./backend/instance:/app/instance
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-jwt-secret-key-change-in-production}
+      - DATABASE_URL=sqlite:///./instance/app.db
+      - UPLOAD_FOLDER=./app/static/uploads
+    restart: unless-stopped
+    networks:
+      - winster-network
+
+networks:
+  winster-network:
+    driver: bridge
+
+volumes:
+  db-data:

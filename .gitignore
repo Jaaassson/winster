@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.env
+venv/
+*.db
+*.sqlite
+
+# Vue/Node
+node_modules/
+dist/
+npm-debug.log
+
+# Docker
+*.log
+docker-data/
+
+# 系统文件
+.DS_Store
+Thumbs.db
