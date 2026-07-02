@@ -432,6 +432,20 @@ onMounted(async () => {
 
   .contact-wrapper {
     grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 30px;
+  }
+
+  .contact-left {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .contact-right {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
   }
 
   .page-header {
@@ -448,11 +462,15 @@ onMounted(async () => {
 
   .contact-left .card {
     padding: 24px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .working-hours-card,
   .social-card {
     padding: 24px;
+    width: 100%;
+    margin: 0 auto;
   }
 }
 

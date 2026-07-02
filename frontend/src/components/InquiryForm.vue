@@ -110,7 +110,7 @@ async function onSubmit() {
       ref="formRef"
       :model="form"
       :rules="rules"
-      label-width="120px"
+      label-width="100px"
       class="inquiry-form"
       @submit.prevent="onSubmit"
     >
@@ -241,13 +241,14 @@ async function onSubmit() {
       }
 
       :deep(.el-form-item__label) {
-        width: 100% !important;
+        width: 90px !important;
         text-align: left;
         margin-bottom: 6px;
+        font-size: 13px;
       }
 
       :deep(.el-form-item__content) {
-        margin-left: 0 !important;
+        margin-left: 90px !important;
       }
 
       .submit-btn {

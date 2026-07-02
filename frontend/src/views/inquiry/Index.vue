@@ -285,6 +285,20 @@ onMounted(async () => {
 @media (max-width: 992px) {
   .inquiry-wrapper {
     grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 30px;
+  }
+
+  .inquiry-left {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .inquiry-right {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
   }
 
   .page-header {
@@ -300,12 +314,16 @@ onMounted(async () => {
   }
 
   .inquiry-left .card {
-    padding: 24px;
+    padding: 20px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .contact-info-card,
   .social-card {
-    padding: 24px;
+    padding: 20px;
+    width: 100%;
+    margin: 0 auto;
   }
 }
 
