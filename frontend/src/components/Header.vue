@@ -2,16 +2,15 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useLangStore } from '@/store/lang'
 import { useCurrencyStore } from '@/store/currency'
 import { siteConfigApi } from '@/api'
+import { getI18nValue } from '@/utils/i18n'
 import LangSwitch from './LangSwitch.vue'
 import CurrencySwitch from './CurrencySwitch.vue'
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
-const langStore = useLangStore()
 const currencyStore = useCurrencyStore()
 const mobileMenuOpen = ref(false)
 const siteConfig = ref<any>({})
@@ -35,9 +34,7 @@ function handleScroll() {
   scrolled.value = window.scrollY > 10
 }
 
-function t2(en: string, zh: string) {
-  return langStore.lang === 'zh' ? (zh || en) : (en || zh)
-}
+const siteName = computed(() => getI18nValue(siteConfig.value.site_name) || 'WINSTER')
 
 function goInquiry() {
   router.push('/inquiry')
@@ -53,7 +50,6 @@ const navItems = computed(() => [
   { path: '/products', key: 'products', label: t('nav.products') },
   { path: '/about', key: 'about', label: t('nav.about') },
   { path: '/contact', key: 'contact', label: t('nav.contact') },
-  { path: '/faq', key: 'faq', label: t('nav.faq') },
   { path: '/inquiry', key: 'inquiry', label: t('nav.inquiry') }
 ])
 
@@ -75,7 +71,7 @@ function isActive(path: string) {
           alt="Logo"
           class="logo-img"
         />
-        <span class="logo-text">{{ t2(siteConfig.site_name_en, siteConfig.site_name_zh) || 'WINSTER' }}</span>
+        <span class="logo-text">{{ siteName }}</span>
       </div>
 
       <nav class="nav-desktop">

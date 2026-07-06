@@ -55,7 +55,6 @@ const quickLinks = computed(() => [
   { path: '/products', label: t('nav.products') },
   { path: '/about', label: t('nav.about') },
   { path: '/contact', label: t('nav.contact') },
-  { path: '/faq', label: t('nav.faq') },
   { path: '/inquiry', label: t('nav.inquiry') }
 ])
 

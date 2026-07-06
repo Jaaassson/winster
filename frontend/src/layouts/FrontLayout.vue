@@ -45,8 +45,6 @@ function toggleCurrency() { currencyStore.set(currencyStore.currency === 'USD' ?
           <router-link to="/news" :class="{active: route.path.startsWith('/news') && !route.path.startsWith('/admin')}">{{ t('nav.news') }}</router-link>
           <router-link to="/about" :class="{active: route.path==='/about'}">{{ t('nav.about') }}</router-link>
           <router-link to="/contact" :class="{active: route.path==='/contact'}">{{ t('nav.contact') }}</router-link>
-          <router-link to="/faq" :class="{active: route.path==='/faq'}">{{ t('nav.faq') }}</router-link>
-          <router-link to="/shipping" :class="{active: route.path==='/shipping'}">{{ t('nav.shipping') }}</router-link>
         </nav>
         <div class="actions">
           <button class="act-btn" @click="toggleLang">{{ langStore.lang === 'en' ? '中文' : 'EN' }}</button>

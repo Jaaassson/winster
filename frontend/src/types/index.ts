@@ -67,15 +67,11 @@ export interface Inquiry {
 
 export interface News {
   id: number
-  title_en: string
-  title_zh: string
-  content_en: string
-  content_zh: string
-  summary_en: string
-  summary_zh: string
-  image: string
-  is_online: boolean
+  title: string
+  content: string
+  cover_image: string
   sort_order: number
+  status: number
   created_at: string
   updated_at: string
 }
@@ -101,25 +97,19 @@ export interface Banner {
 
 export interface SiteConfig {
   id: number
-  site_name_en: string
-  site_name_zh: string
-  logo: string
+  site_name: string
+  site_title: string
+  keywords: string
+  description: string
+  company_name: string
   phone: string
   email: string
-  address_en: string
-  address_zh: string
-  whatsapp: string
-  wechat: string
+  address: string
+  about_us: string
   facebook: string
   twitter: string
   linkedin: string
   instagram: string
-  about_en: string
-  about_zh: string
-  shipping_en: string
-  shipping_zh: string
-  faq_en: string
-  faq_zh: string
   created_at: string
   updated_at: string
 }

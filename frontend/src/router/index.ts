@@ -12,9 +12,9 @@ const routes: RouteRecordRaw[] = [
       { path: 'products/:id', name: 'product-detail', component: () => import('@/views/products/Detail.vue'), props: true },
       { path: 'inquiry', name: 'inquiry', component: () => import('@/views/inquiry/Index.vue') },
       { path: 'about', name: 'about', component: () => import('@/views/about/Index.vue') },
-      { path: 'contact', name: 'contact', component: () => import('@/views/contact/Index.vue') },
-      { path: 'faq', name: 'faq', component: () => import('@/views/faq/Index.vue') },
-      { path: 'shipping', name: 'shipping', component: () => import('@/views/shipping/Index.vue') }
+      { path: 'news', name: 'news', component: () => import('@/views/news/Index.vue') },
+      { path: 'news/:id', name: 'news-detail', component: () => import('@/views/news/Detail.vue'), props: true },
+      { path: 'contact', name: 'contact', component: () => import('@/views/contact/Index.vue') }
     ]
   },
   ...adminRoutes,

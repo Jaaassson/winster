@@ -16,15 +16,20 @@ const configFormRef = ref<FormInstance>()
 const bannerFormRef = ref<FormInstance>()
 
 const configForm = reactive({
-  site_name: '',
-  site_title: '',
+  site_name_zh: '',
+  site_name_en: '',
+  site_title_zh: '',
+  site_title_en: '',
   keywords: '',
   description: '',
-  company_name: '',
+  company_name_zh: '',
+  company_name_en: '',
   phone: '',
   email: '',
-  address: '',
-  about_us: '',
+  address_zh: '',
+  address_en: '',
+  about_us_zh: '',
+  about_us_en: '',
   facebook: '',
   twitter: '',
   linkedin: '',
@@ -44,12 +49,52 @@ const bannerForm = reactive({
   status: 1
 })
 
+function parseI18nField(value: any): { 'zh-CN': string; 'en-US': string } {
+  if (!value) return { 'zh-CN': '', 'en-US': '' }
+  if (typeof value === 'object') {
+    return { 'zh-CN': value['zh-CN'] || '', 'en-US': value['en-US'] || '' }
+  }
+  try {
+    const parsed = JSON.parse(value)
+    return { 'zh-CN': parsed['zh-CN'] || '', 'en-US': parsed['en-US'] || '' }
+  } catch {
+    return { 'zh-CN': String(value), 'en-US': String(value) }
+  }
+}
+
+function buildI18nField(zh: string, en: string): string {
+  return JSON.stringify({ 'zh-CN': zh || '', 'en-US': en || '' })
+}
+
 async function loadConfig() {
   loading.value = true
   try {
     const res = await siteConfigApi.get()
     if ((res.code === 200 || res.code === 0) && res.data) {
-      Object.assign(configForm, res.data)
+      const d = res.data
+      const siteName = parseI18nField(d.site_name)
+      const siteTitle = parseI18nField(d.site_title)
+      const companyName = parseI18nField(d.company_name)
+      const address = parseI18nField(d.address)
+      const aboutUs = parseI18nField(d.about_us)
+      configForm.site_name_zh = siteName['zh-CN']
+      configForm.site_name_en = siteName['en-US']
+      configForm.site_title_zh = siteTitle['zh-CN']
+      configForm.site_title_en = siteTitle['en-US']
+      configForm.keywords = d.keywords || ''
+      configForm.description = d.description || ''
+      configForm.company_name_zh = companyName['zh-CN']
+      configForm.company_name_en = companyName['en-US']
+      configForm.phone = d.phone || ''
+      configForm.email = d.email || ''
+      configForm.address_zh = address['zh-CN']
+      configForm.address_en = address['en-US']
+      configForm.about_us_zh = aboutUs['zh-CN']
+      configForm.about_us_en = aboutUs['en-US']
+      configForm.facebook = d.facebook || ''
+      configForm.twitter = d.twitter || ''
+      configForm.linkedin = d.linkedin || ''
+      configForm.instagram = d.instagram || ''
     }
   } catch (error) {
     console.error('获取网站配置失败:', error)
@@ -61,7 +106,22 @@ async function loadConfig() {
 async function handleSave() {
   saving.value = true
   try {
-    const res = await siteConfigApi.update(configForm)
+    const payload = {
+      site_name: buildI18nField(configForm.site_name_zh, configForm.site_name_en),
+      site_title: buildI18nField(configForm.site_title_zh, configForm.site_title_en),
+      keywords: configForm.keywords,
+      description: configForm.description,
+      company_name: buildI18nField(configForm.company_name_zh, configForm.company_name_en),
+      phone: configForm.phone,
+      email: configForm.email,
+      address: buildI18nField(configForm.address_zh, configForm.address_en),
+      about_us: buildI18nField(configForm.about_us_zh, configForm.about_us_en),
+      facebook: configForm.facebook,
+      twitter: configForm.twitter,
+      linkedin: configForm.linkedin,
+      instagram: configForm.instagram
+    }
+    const res = await siteConfigApi.update(payload)
     if (res.code === 200 || res.code === 0) {
       ElMessage.success('保存成功')
     }
@@ -219,13 +279,25 @@ onMounted(() => {
           >
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="网站名称">
-                  <el-input v-model="configForm.site_name" placeholder="请输入网站名称" />
+                <el-form-item label="网站名称(中)">
+                  <el-input v-model="configForm.site_name_zh" placeholder="请输入中文网站名称" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="网站标题">
-                  <el-input v-model="configForm.site_title" placeholder="请输入网站标题" />
+                <el-form-item label="网站名称(英)">
+                  <el-input v-model="configForm.site_name_en" placeholder="Please enter English site name" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="网站标题(中)">
+                  <el-input v-model="configForm.site_title_zh" placeholder="请输入中文网站标题" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="网站标题(英)">
+                  <el-input v-model="configForm.site_title_en" placeholder="Please enter English site title" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -243,25 +315,37 @@ onMounted(() => {
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="公司名称">
-                  <el-input v-model="configForm.company_name" placeholder="请输入公司名称" />
+                <el-form-item label="公司名称(中)">
+                  <el-input v-model="configForm.company_name_zh" placeholder="请输入中文公司名称" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="联系电话">
-                  <el-input v-model="configForm.phone" placeholder="请输入联系电话" />
+                <el-form-item label="公司名称(英)">
+                  <el-input v-model="configForm.company_name_en" placeholder="Please enter English company name" />
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
+                <el-form-item label="联系电话">
+                  <el-input v-model="configForm.phone" placeholder="请输入联系电话" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
                 <el-form-item label="邮箱">
                   <el-input v-model="configForm.email" placeholder="请输入联系邮箱" />
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="地址">
-                  <el-input v-model="configForm.address" placeholder="请输入地址" />
+                <el-form-item label="地址(中)">
+                  <el-input v-model="configForm.address_zh" type="textarea" :rows="2" placeholder="请输入中文地址" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="地址(英)">
+                  <el-input v-model="configForm.address_en" type="textarea" :rows="2" placeholder="Please enter English address" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -307,12 +391,20 @@ onMounted(() => {
             label-width="120px"
             class="config-form"
           >
-            <el-form-item label="关于我们">
+            <el-form-item label="关于我们(中)">
               <el-input
-                v-model="configForm.about_us"
+                v-model="configForm.about_us_zh"
                 type="textarea"
-                :rows="10"
-                placeholder="请输入关于我们内容"
+                :rows="8"
+                placeholder="请输入中文关于我们内容"
+              />
+            </el-form-item>
+            <el-form-item label="关于我们(英)">
+              <el-input
+                v-model="configForm.about_us_en"
+                type="textarea"
+                :rows="8"
+                placeholder="Please enter English about us content"
               />
             </el-form-item>
           </el-form>

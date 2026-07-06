@@ -1,27 +1,22 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLangStore } from '@/store/lang'
 import { siteConfigApi } from '@/api'
+import { getI18nValue } from '@/utils/i18n'
 import { Trophy, Medal, User, OfficeBuilding, Clock, TrendCharts, Star, Goods } from '@element-plus/icons-vue'
 import type { SiteConfig } from '@/types'
 
 const { t } = useI18n()
-const langStore = useLangStore()
 const siteConfig = ref<SiteConfig | null>(null)
 
 const aboutContent = computed(() => {
   if (!siteConfig.value) return ''
-  return langStore.lang === 'zh'
-    ? siteConfig.value.about_zh || siteConfig.value.about_en
-    : siteConfig.value.about_en || siteConfig.value.about_zh
+  return getI18nValue(siteConfig.value.about_us)
 })
 
 const companyName = computed(() => {
   if (!siteConfig.value) return ''
-  return langStore.lang === 'zh'
-    ? siteConfig.value.site_name_zh || siteConfig.value.site_name_en
-    : siteConfig.value.site_name_en || siteConfig.value.site_name_zh
+  return getI18nValue(siteConfig.value.company_name) || getI18nValue(siteConfig.value.site_name)
 })
 
 const advantages = computed(() => [

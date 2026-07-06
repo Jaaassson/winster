@@ -178,7 +178,7 @@ def init_data():
         banner3 = Banner(
             image_url="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=banner%20global%20shipping%20logistics&image_size=landscape_16_9",
             title=json.dumps({"zh-CN": "全球发货，快速送达", "en-US": "Global Shipping, Fast Delivery"}, ensure_ascii=False),
-            link_url="/shipping",
+            link_url="/contact",
             sort_order=3,
             status=1
         )

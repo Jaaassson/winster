@@ -8,6 +8,7 @@ import { bannerApi, siteConfigApi, categoryApi, productApi } from '@/api'
 import ProductCard from '@/components/ProductCard.vue'
 import { useLangStore } from '@/store/lang'
 import { useCurrencyStore } from '@/store/currency'
+import { getI18nValue } from '@/utils/i18n'
 import type { Banner, SiteConfig, Category, Product } from '@/types'
 
 const { t } = useI18n()
@@ -50,9 +51,7 @@ const getCategoryName = (category: Category) => {
 
 const getAboutUs = computed(() => {
   if (!siteConfig.value) return ''
-  return langStore.lang === 'zh'
-    ? siteConfig.value.about_zh || siteConfig.value.about_en
-    : siteConfig.value.about_en || siteConfig.value.about_zh
+  return getI18nValue(siteConfig.value.about_us)
 })
 
 const factoryImages = [
