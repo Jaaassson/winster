@@ -24,6 +24,7 @@ def _config_to_dict(config):
         "twitter": config.twitter,
         "linkedin": config.linkedin,
         "instagram": config.instagram,
+        "qrcode": config.qrcode,
         "created_at": config.created_at.isoformat() if config.created_at else None,
         "updated_at": config.updated_at.isoformat() if config.updated_at else None,
     }
@@ -60,7 +61,7 @@ def update_site_config():
     fields = [
         "site_name", "site_title", "keywords", "description",
         "company_name", "phone", "email", "address", "about_us",
-        "facebook", "twitter", "linkedin", "instagram",
+        "facebook", "twitter", "linkedin", "instagram", "qrcode",
     ]
 
     for field in fields:

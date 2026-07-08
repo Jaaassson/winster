@@ -14,7 +14,7 @@ const loading = ref(false)
 const newsList = ref<News[]>([])
 const pagination = reactive({
   page: 1,
-  page_size: 9,
+  page_size: 10,
   total: 0
 })
 
@@ -136,6 +136,7 @@ onMounted(() => {
   color: #fff;
   padding: 60px 0;
   text-align: center;
+  margin-bottom: 60px;
 
   .page-title {
     font-size: 36px;
@@ -151,7 +152,7 @@ onMounted(() => {
 }
 
 .section {
-  padding: 60px 0;
+  padding: 0 0 60px;
 }
 
 .container {
@@ -161,9 +162,9 @@ onMounted(() => {
 }
 
 .news-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .news-card {
@@ -174,14 +175,15 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  height: 160px;
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 28px rgba(26, 115, 232, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(26, 115, 232, 0.15);
 
     .news-image img {
-      transform: scale(1.08);
+      transform: scale(1.05);
     }
 
     .news-title {
@@ -192,7 +194,9 @@ onMounted(() => {
 
 .news-image {
   position: relative;
-  height: 220px;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
   overflow: hidden;
   background: #f0f7ff;
 
@@ -206,6 +210,7 @@ onMounted(() => {
   .image-placeholder {
     width: 100%;
     height: 100%;
+    min-height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -214,41 +219,42 @@ onMounted(() => {
 
   .news-date {
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
-    background: rgba(26, 115, 232, 0.9);
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
     color: #fff;
-    padding: 10px 14px;
-    border-radius: 0 0 8px 0;
+    padding: 12px 10px 8px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    line-height: 1.2;
+    align-items: flex-start;
+    gap: 2px;
 
     .day {
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 700;
     }
 
     .year-month {
-      font-size: 11px;
+      font-size: 10px;
       opacity: 0.9;
     }
   }
 }
 
 .news-content {
-  padding: 24px;
+  padding: 28px 32px;
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .news-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   color: #1a1a1a;
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -258,10 +264,10 @@ onMounted(() => {
 }
 
 .news-summary {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
-  line-height: 1.7;
-  margin: 0 0 16px 0;
+  line-height: 1.8;
+  margin: 0 0 20px 0;
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -271,7 +277,7 @@ onMounted(() => {
 
 .news-footer {
   .read-more {
-    font-size: 13px;
+    font-size: 14px;
     color: #1a73e8;
     font-weight: 500;
   }
@@ -284,15 +290,32 @@ onMounted(() => {
 }
 
 @media (max-width: 992px) {
-  .news-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+  .news-card {
+    height: 140px;
+  }
+
+  .news-image {
+    width: 140px;
+    height: 140px;
+  }
+
+  .news-content {
+    padding: 16px 20px;
+  }
+
+  .news-title {
+    font-size: 17px;
+  }
+
+  .news-summary {
+    font-size: 14px;
   }
 }
 
 @media (max-width: 768px) {
   .page-header {
     padding: 40px 0;
+    margin-bottom: 40px;
 
     .page-title {
       font-size: 28px;
@@ -300,16 +323,35 @@ onMounted(() => {
   }
 
   .section {
-    padding: 40px 0;
+    padding: 0 0 40px;
   }
 
   .news-grid {
-    grid-template-columns: 1fr;
     gap: 20px;
   }
 
+  .news-card {
+    flex-direction: column;
+    height: auto;
+  }
+
   .news-image {
-    height: 200px;
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+  }
+
+  .news-content {
+    padding: 20px;
+  }
+
+  .news-title {
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+
+  .news-summary {
+    margin-bottom: 16px;
   }
 }
 </style>

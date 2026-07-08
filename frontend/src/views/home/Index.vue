@@ -3,13 +3,13 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ElCarousel, ElCarouselItem, ElButton } from 'element-plus'
-import { Picture, ChatDotRound, ArrowRight, OfficeBuilding } from '@element-plus/icons-vue'
-import { bannerApi, siteConfigApi, categoryApi, productApi } from '@/api'
+import { Picture, ChatDotRound, ArrowRight, OfficeBuilding, Document } from '@element-plus/icons-vue'
+import { bannerApi, siteConfigApi, categoryApi, productApi, newsApi } from '@/api'
 import ProductCard from '@/components/ProductCard.vue'
 import { useLangStore } from '@/store/lang'
 import { useCurrencyStore } from '@/store/currency'
 import { getI18nValue } from '@/utils/i18n'
-import type { Banner, SiteConfig, Category, Product } from '@/types'
+import type { Banner, SiteConfig, Category, Product, News } from '@/types'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -20,6 +20,7 @@ const banners = ref<Banner[]>([])
 const siteConfig = ref<SiteConfig | null>(null)
 const categories = ref<Category[]>([])
 const hotProducts = ref<Product[]>([])
+const latestNews = ref<News[]>([])
 const loading = ref(true)
 
 const getBannerTitle = (banner: Banner) => {
@@ -54,6 +55,20 @@ const getAboutUs = computed(() => {
   return getI18nValue(siteConfig.value.about_us)
 })
 
+const getNewsTitle = (news: News) => getI18nValue(news.title)
+
+const getNewsSummary = (news: News) => {
+  const content = getI18nValue(news.content)
+  const text = content.replace(/<[^>]+>/g, '').trim()
+  return text.length > 80 ? text.slice(0, 80) + '...' : text
+}
+
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return ''
+  const d = new Date(dateStr)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 const factoryImages = [
   {
     url: new URL('@/assets/images/product_line.jpg', import.meta.url).href,
@@ -71,16 +86,18 @@ const factoryImages = [
 
 async function loadData() {
   try {
-    const [bannerRes, configRes, categoryRes, productRes] = await Promise.all([
+    const [bannerRes, configRes, categoryRes, productRes, newsRes] = await Promise.all([
       bannerApi.list(),
       siteConfigApi.get(),
       categoryApi.list(),
-      productApi.hot()
+      productApi.hot(),
+      newsApi.list({ page: 1, page_size: 5 })
     ])
     banners.value = bannerRes.data || []
     siteConfig.value = configRes.data || null
     categories.value = (categoryRes.data || []).slice(0, 8)
     hotProducts.value = (productRes.data || []).slice(0, 4)
+    latestNews.value = newsRes.data?.items || []
   } catch (error) {
     console.error('Failed to load home data:', error)
   } finally {
@@ -101,6 +118,14 @@ function handleBannerClick(banner: Banner) {
       router.push(link)
     }
   }
+}
+
+function goToNews() {
+  router.push('/news')
+}
+
+function goToNewsDetail(id: number) {
+  router.push(`/news/${id}`)
 }
 
 onMounted(() => {
@@ -231,6 +256,48 @@ onMounted(() => {
       </div>
     </section>
 
+    <section class="section news-section" v-if="latestNews.length > 0">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">
+            <el-icon class="title-icon"><Document /></el-icon>
+            {{ t('home.newsTitle') }}
+          </h2>
+          <p class="section-subtitle">{{ t('home.newsSubtitle') }}</p>
+        </div>
+        <div class="news-grid">
+          <div
+            v-for="news in latestNews"
+            :key="news.id"
+            class="news-card"
+            @click="goToNewsDetail(news.id)"
+          >
+            <div class="news-cover">
+              <img
+                v-if="news.cover_image"
+                :src="news.cover_image"
+                :alt="getNewsTitle(news)"
+              />
+              <div v-else class="news-cover-placeholder">
+                <el-icon :size="32"><Document /></el-icon>
+              </div>
+            </div>
+            <div class="news-body">
+              <div class="news-date">{{ formatDate(news.created_at) }}</div>
+              <h3 class="news-title">{{ getNewsTitle(news) }}</h3>
+              <p class="news-summary">{{ getNewsSummary(news) }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="view-all-wrapper">
+          <el-button type="primary" size="large" @click="goToNews">
+            {{ t('home.viewAllNews') }}
+            <el-icon class="el-icon--right"><ArrowRight /></el-icon>
+          </el-button>
+        </div>
+      </div>
+    </section>
+
     <section class="section factory-section">
       <div class="container">
         <div class="section-header">
@@ -352,6 +419,10 @@ onMounted(() => {
 
     &.hot-products-section {
       background: #fff;
+    }
+
+    &.news-section {
+      background: #f0f7ff;
     }
 
     &.factory-section {
@@ -508,6 +579,97 @@ onMounted(() => {
     }
   }
 
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .news-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(26, 115, 232, 0.15);
+
+      .news-cover img {
+        transform: scale(1.05);
+      }
+
+      .news-title {
+        color: #1a73e8;
+      }
+    }
+  }
+
+  .news-cover {
+    height: 120px;
+    overflow: hidden;
+    background: #e8f4ff;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .news-cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b3d4ff;
+    }
+  }
+
+  .news-body {
+    padding: 14px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .news-date {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 6px;
+  }
+
+  .news-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 8px;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .news-summary {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   .products-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -628,6 +790,11 @@ onMounted(() => {
       grid-template-columns: repeat(3, 1fr);
     }
 
+    .news-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
     .products-grid {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -690,6 +857,11 @@ onMounted(() => {
     }
 
     .categories-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .news-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
     }

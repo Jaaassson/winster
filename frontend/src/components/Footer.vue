@@ -53,6 +53,7 @@ function goInquiry() {
 const quickLinks = computed(() => [
   { path: '/', label: t('nav.home') },
   { path: '/products', label: t('nav.products') },
+  { path: '/news', label: t('nav.news') },
   { path: '/about', label: t('nav.about') },
   { path: '/contact', label: t('nav.contact') },
   { path: '/inquiry', label: t('nav.inquiry') }
@@ -111,7 +112,7 @@ const socialLinks = [
         </div>
 
         <div class="footer-col">
-          <h4 class="footer-subtitle">Quick Links</h4>
+          <h4 class="footer-subtitle">{{ t('footer.quickLinks') }}</h4>
           <ul class="footer-links">
             <li v-for="link in quickLinks" :key="link.path">
               <router-link :to="link.path">{{ link.label }}</router-link>
@@ -129,6 +130,10 @@ const socialLinks = [
             <el-icon><Clock /></el-icon>
             <span>{{ workTime }}</span>
           </p>
+          <div v-if="siteConfig.qrcode" class="qrcode-wrapper">
+            <p class="qrcode-label">{{ t('footer.qrcode') }}</p>
+            <img :src="siteConfig.qrcode" class="qrcode-img" alt="WeChat QR Code" />
+          </div>
         </div>
       </div>
     </div>
@@ -220,20 +225,38 @@ const socialLinks = [
   }
 
   .footer-contact-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 14px;
-    margin-bottom: 12px;
-    color: #9ca3af;
-    line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #9ca3af;
+      line-height: 1.6;
 
-    .el-icon {
-      flex-shrink: 0;
-      margin-top: 2px;
-      color: #1a73e8;
+      .el-icon {
+        flex-shrink: 0;
+        margin-top: 2px;
+        color: #1a73e8;
+      }
     }
-  }
+
+    .qrcode-wrapper {
+      margin-top: 16px;
+
+      .qrcode-label {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-bottom: 8px;
+      }
+
+      .qrcode-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 8px;
+        background: #fff;
+        padding: 4px;
+      }
+    }
 
   .footer-inquiry-btn {
     display: inline-flex;

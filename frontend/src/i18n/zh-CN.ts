@@ -100,6 +100,9 @@ export default {
     categoriesSubtitle: '丰富的产品系列，满足您的多样化需求',
     hotTitle: '热销产品',
     hotSubtitle: '精选热门产品，品质保证，价格优惠',
+    newsTitle: '最新新闻',
+    newsSubtitle: '了解公司动态和行业资讯',
+    viewAllNews: '查看全部新闻',
     factoryTitle: '我们的工厂',
     factorySubtitle: '现代化生产基地，确保产品质量和交付效率',
     factory1: '生产线',
@@ -107,6 +110,8 @@ export default {
     factory3: '质量检测',
     inquiryTitle: '有问题？立即联系我们！',
     inquirySubtitle: '专业团队随时为您解答疑问，提供定制化解决方案',
+    qrcodeTitle: '扫码添加微信',
+    qrcodeSubtitle: '扫描下方二维码，添加我们的微信客服，获取更快速的响应和更贴心的服务',
     years: '年行业经验',
     countries: '出口国家',
     products: '产品种类',
@@ -194,7 +199,8 @@ export default {
     phone: '电话',
     quickLinks: '快速链接',
     followUs: '关注我们',
-    copyright: '© 2025 Winster 实业有限公司 版权所有'
+    copyright: '© 2025 Winster 实业有限公司 版权所有',
+    qrcode: '微信二维码'
   },
   admin: {
     loginTitle: '管理员登录',

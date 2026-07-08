@@ -100,6 +100,7 @@ onMounted(() => {
   color: #fff;
   padding: 60px 0;
   text-align: center;
+  margin-bottom: 60px;
 
   .page-title {
     font-size: 32px;
@@ -215,6 +216,7 @@ onMounted(() => {
 @media (max-width: 768px) {
   .page-header {
     padding: 40px 0;
+    margin-bottom: 40px;
 
     .page-title {
       font-size: 24px;

@@ -18,3 +18,4 @@ class SiteConfig(BaseModel):
     twitter = db.Column(db.String(255))
     linkedin = db.Column(db.String(255))
     instagram = db.Column(db.String(255))
+    qrcode = db.Column(db.String(255))

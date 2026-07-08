@@ -33,7 +33,8 @@ const configForm = reactive({
   facebook: '',
   twitter: '',
   linkedin: '',
-  instagram: ''
+  instagram: '',
+  qrcode: ''
 })
 
 const bannerList = ref<any[]>([])
@@ -95,6 +96,7 @@ async function loadConfig() {
       configForm.twitter = d.twitter || ''
       configForm.linkedin = d.linkedin || ''
       configForm.instagram = d.instagram || ''
+      configForm.qrcode = d.qrcode || ''
     }
   } catch (error) {
     console.error('获取网站配置失败:', error)
@@ -119,7 +121,8 @@ async function handleSave() {
       facebook: configForm.facebook,
       twitter: configForm.twitter,
       linkedin: configForm.linkedin,
-      instagram: configForm.instagram
+      instagram: configForm.instagram,
+      qrcode: configForm.qrcode
     }
     const res = await siteConfigApi.update(payload)
     if (res.code === 200 || res.code === 0) {
@@ -251,6 +254,25 @@ function getStatusTag(status: number) {
 
 function getStatusText(status: number) {
   return status === 1 ? '已上线' : '已下线'
+}
+
+async function handleQrcodeUpload(options: any) {
+  const { file, onSuccess, onError } = options
+  try {
+    const res = await uploadApi.image(file)
+    if (res.code === 200 || res.code === 0) {
+      configForm.qrcode = res.data.url
+      onSuccess(res.data)
+      ElMessage.success('上传成功')
+    } else {
+      onError(new Error(res.message || '上传失败'))
+      ElMessage.error(res.message || '上传失败')
+    }
+  } catch (error: any) {
+    console.error('上传失败:', error)
+    onError(error)
+    ElMessage.error(error.message || '上传失败')
+  }
 }
 
 onMounted(() => {
@@ -406,6 +428,36 @@ onMounted(() => {
                 :rows="8"
                 placeholder="Please enter English about us content"
               />
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+
+        <el-tab-pane label="二维码" name="qrcode">
+          <el-form
+            :model="configForm"
+            label-width="120px"
+            class="config-form"
+          >
+            <el-form-item label="微信二维码">
+              <div class="qrcode-upload">
+                <div v-if="configForm.qrcode" class="qrcode-preview">
+                  <el-image :src="configForm.qrcode" fit="contain" style="width: 100%; height: 100%" />
+                  <span class="remove-qrcode" @click="configForm.qrcode = ''">×</span>
+                </div>
+                <el-upload
+                  v-else
+                  action="#"
+                  :show-file-list="false"
+                  :http-request="handleQrcodeUpload"
+                  accept="image/*"
+                >
+                  <div class="upload-qrcode-btn">
+                    <el-icon><Upload /></el-icon>
+                    <span>上传二维码</span>
+                  </div>
+                </el-upload>
+              </div>
+              <div class="qrcode-tip">支持上传微信二维码图片，用于首页展示</div>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -615,5 +667,59 @@ onMounted(() => {
 .upload-banner-btn:hover {
   border-color: #409eff;
   color: #409eff;
+}
+
+.qrcode-upload {
+  display: flex;
+}
+
+.qrcode-preview {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.remove-qrcode {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  text-align: center;
+  line-height: 24px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.upload-qrcode-btn {
+  width: 200px;
+  height: 200px;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #999;
+  font-size: 14px;
+  gap: 8px;
+}
+
+.upload-qrcode-btn:hover {
+  border-color: #409eff;
+  color: #409eff;
+}
+
+.qrcode-tip {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #999;
 }
 </style>

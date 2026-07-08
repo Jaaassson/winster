@@ -48,6 +48,7 @@ function closeMobileMenu() {
 const navItems = computed(() => [
   { path: '/', key: 'home', label: t('nav.home') },
   { path: '/products', key: 'products', label: t('nav.products') },
+  { path: '/news', key: 'news', label: t('nav.news') },
   { path: '/about', key: 'about', label: t('nav.about') },
   { path: '/contact', key: 'contact', label: t('nav.contact') },
   { path: '/inquiry', key: 'inquiry', label: t('nav.inquiry') }

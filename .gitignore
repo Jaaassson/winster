@@ -14,6 +14,9 @@ npm-debug.log
 # 日志
 *.log
 
+# 上传文件
+backend/app/static/uploads/
+
 # 系统文件
 .DS_Store
 Thumbs.db

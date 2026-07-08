@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useCurrencyStore = defineStore('currency', () => {
-  const currency = ref<string>((typeof localStorage !== 'undefined' && localStorage.getItem('currency')) || 'USD')
+  const currency = ref<string>((typeof localStorage !== 'undefined' && localStorage.getItem('currency')) || 'CNY')
   const rate = ref<number>(7.2)
 
   function set(c: string) {

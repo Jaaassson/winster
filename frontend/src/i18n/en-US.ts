@@ -100,6 +100,9 @@ export default {
     categoriesSubtitle: 'Rich product series to meet your diverse needs',
     hotTitle: 'Hot Products',
     hotSubtitle: 'Selected hot products, quality guaranteed, competitive prices',
+    newsTitle: 'Latest News',
+    newsSubtitle: 'Stay updated with company news and industry insights',
+    viewAllNews: 'View All News',
     factoryTitle: 'Our Factory',
     factorySubtitle: 'Modern production base ensuring product quality and delivery efficiency',
     factory1: 'Production Line',
@@ -107,6 +110,8 @@ export default {
     factory3: 'Quality Control',
     inquiryTitle: 'Have a Question? Contact Us!',
     inquirySubtitle: 'Professional team ready to answer your questions and provide customized solutions',
+    qrcodeTitle: 'Scan to Add WeChat',
+    qrcodeSubtitle: 'Scan the QR code below to add our WeChat customer service for faster response and better service',
     years: 'Years Experience',
     countries: 'Countries',
     products: 'Products',
@@ -194,7 +199,8 @@ export default {
     phone: 'Phone',
     quickLinks: 'Quick Links',
     followUs: 'Follow Us',
-    copyright: '© 2025 Winster Industrial Co., Ltd. All rights reserved.'
+    copyright: '© 2025 Winster Industrial Co., Ltd. All rights reserved.',
+    qrcode: 'WeChat QR Code'
   },
   admin: {
     loginTitle: 'Admin Login',

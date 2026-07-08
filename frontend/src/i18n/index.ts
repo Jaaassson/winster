@@ -5,7 +5,7 @@ import storage from '@/utils/storage'
 
 export type Locale = 'en' | 'zh'
 
-const savedLocale = (storage.get('locale') as Locale) || 'en'
+const savedLocale = (storage.get('locale') as Locale) || 'zh'
 
 const i18n = createI18n({
   legacy: false,
