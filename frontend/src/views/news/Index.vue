@@ -176,7 +176,7 @@ onMounted(() => {
   transition: all 0.3s ease;
   display: flex;
   flex-direction: row;
-  height: 160px;
+  min-height: 200px;
 
   &:hover {
     transform: translateY(-4px);
@@ -194,11 +194,12 @@ onMounted(() => {
 
 .news-image {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  min-height: 200px;
   flex-shrink: 0;
   overflow: hidden;
   background: #f0f7ff;
+  align-self: stretch;
 
   img {
     width: 100%;
@@ -243,11 +244,11 @@ onMounted(() => {
 }
 
 .news-content {
-  padding: 28px 32px;
+  padding: 24px 32px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .news-title {
@@ -266,8 +267,8 @@ onMounted(() => {
 .news-summary {
   font-size: 15px;
   color: #666;
-  line-height: 1.8;
-  margin: 0 0 20px 0;
+  line-height: 1.6;
+  margin: 12px 0;
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -291,12 +292,12 @@ onMounted(() => {
 
 @media (max-width: 992px) {
   .news-card {
-    height: 140px;
+    min-height: 180px;
   }
 
   .news-image {
-    width: 140px;
-    height: 140px;
+    width: 180px;
+    min-height: 180px;
   }
 
   .news-content {
@@ -309,6 +310,8 @@ onMounted(() => {
 
   .news-summary {
     font-size: 14px;
+    margin: 8px 0;
+    -webkit-line-clamp: 2;
   }
 }
 
