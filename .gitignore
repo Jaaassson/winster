@@ -8,7 +8,6 @@ venv/
 
 # Vue/Node
 node_modules/
-dist/
 npm-debug.log
 
 # 日志
