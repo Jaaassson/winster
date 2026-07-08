@@ -177,10 +177,12 @@ async function loadCategories() {
 }
 
 function handleNodeClick(data: any) {
-  queryParams.categoryId = data.id
-  queryParams.page = 1
-  mobileDrawerVisible.value = false
-  loadProducts()
+  if (!data.children || data.children.length === 0) {
+    queryParams.categoryId = data.id
+    queryParams.page = 1
+    mobileDrawerVisible.value = false
+    loadProducts()
+  }
 }
 
 function clearCategory() {
@@ -284,7 +286,7 @@ watch(() => route.query, (newQuery) => {
                 node-key="id"
                 highlight-current
                 @node-click="handleNodeClick"
-                :expand-on-click-node="false"
+                :expand-on-click-node="true"
                 class="category-tree"
               >
                 <template #default="{ node, data }">
@@ -322,7 +324,7 @@ watch(() => route.query, (newQuery) => {
                 node-key="id"
                 highlight-current
                 @node-click="handleNodeClick"
-                :expand-on-click-node="false"
+                :expand-on-click-node="true"
                 class="category-tree"
               >
                 <template #default="{ node, data }">
