@@ -199,7 +199,7 @@ export default {
     phone: '电话',
     quickLinks: '快速链接',
     followUs: '关注我们',
-    copyright: '© 2025 Winster 实业有限公司 版权所有',
+    copyright: '© 2026 Winster 上海文森特机械设备有限公司 版权所有',
     qrcode: '微信二维码'
   },
   admin: {
