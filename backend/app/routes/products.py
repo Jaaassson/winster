@@ -13,6 +13,20 @@ products_bp = Blueprint("products", __name__, url_prefix="/api/v1")
 admin_products_bp = Blueprint("admin_products", __name__, url_prefix="/api/v1/admin/products")
 
 
+def auto_calculate_price(price_usd, price_cny):
+    """自动计算缺失的价格字段，汇率 1 USD = 7.2 CNY"""
+    EXCHANGE_RATE = 7.2
+    usd = price_usd if price_usd is not None else 0
+    cny = price_cny if price_cny is not None else 0
+
+    if usd and not cny:
+        cny = round(usd * EXCHANGE_RATE, 2)
+    elif cny and not usd:
+        usd = round(cny / EXCHANGE_RATE, 2)
+
+    return usd, cny
+
+
 def parse_json_field(value):
     if value is None:
         return None
@@ -200,6 +214,7 @@ def admin_create_product():
     specs = data.get("specs")
     price_usd = data.get("price_usd", 0)
     price_cny = data.get("price_cny", 0)
+    price_usd, price_cny = auto_calculate_price(price_usd, price_cny)
     stock = data.get("stock", 0)
     moq = data.get("moq", 1)
     packaging = data.get("packaging")
@@ -282,11 +297,10 @@ def admin_update_product(id):
         specs = data["specs"]
         product.specs = json.dumps(specs, ensure_ascii=False) if isinstance(specs, (list, dict)) else specs
 
-    if "price_usd" in data:
-        product.price_usd = data["price_usd"]
-
-    if "price_cny" in data:
-        product.price_cny = data["price_cny"]
+    if "price_usd" in data or "price_cny" in data:
+        price_usd = data.get("price_usd", product.price_usd)
+        price_cny = data.get("price_cny", product.price_cny)
+        product.price_usd, product.price_cny = auto_calculate_price(price_usd, price_cny)
 
     if "stock" in data:
         product.stock = data["stock"]
