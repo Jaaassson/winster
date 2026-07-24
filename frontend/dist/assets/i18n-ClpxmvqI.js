@@ -1,1 +1,0 @@
-import{aC as c}from"./index-BBPmdzpv.js";function s(n){if(!n)return{};if(typeof n=="object")return n;try{return JSON.parse(n)}catch{return{en:n,zh:n}}}function f(n,e){const t=s(n),r=e||c(),o={en:"en-US",zh:"zh-CN"}[r]||r;return t[o]||t[r]||t["en-US"]||t["zh-CN"]||n||""}export{f as g};
