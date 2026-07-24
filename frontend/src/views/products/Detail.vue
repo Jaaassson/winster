@@ -78,10 +78,11 @@ const carouselImages = computed(() => {
 
 const formattedPrice = computed(() => {
   if (!product.value) return '-'
-  const price = currencyStore.currency === 'USD'
+  const sourceCurrency = currencyStore.currency
+  const price = sourceCurrency === 'USD'
     ? (product.value as any).price_usd
     : (product.value as any).price_cny
-  return currencyStore.format(price)
+  return currencyStore.format(price, sourceCurrency)
 })
 
 const specTableData = computed(() => {

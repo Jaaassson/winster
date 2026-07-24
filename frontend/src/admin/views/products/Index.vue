@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { productApi, categoryApi, uploadApi } from '@/admin/api'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Edit, Delete, Search, Upload, Switch } from '@element-plus/icons-vue'
@@ -42,6 +42,31 @@ const form = reactive({
   sort_order: 0,
   is_hot: 0,
   status: 1
+})
+
+// 汇率：1 USD = 7.2 CNY
+const EXCHANGE_RATE = 7.2
+let isLoadingData = false
+let isCalculating = false
+
+// 价格联动：修改 USD 自动计算 CNY
+watch(() => form.price_usd, (newVal) => {
+  if (isLoadingData || isCalculating) return
+  if (newVal !== null && newVal !== undefined) {
+    isCalculating = true
+    form.price_cny = Number((newVal * EXCHANGE_RATE).toFixed(2))
+    isCalculating = false
+  }
+})
+
+// 价格联动：修改 CNY 自动计算 USD
+watch(() => form.price_cny, (newVal) => {
+  if (isLoadingData || isCalculating) return
+  if (newVal !== null && newVal !== undefined) {
+    isCalculating = true
+    form.price_usd = Number((newVal / EXCHANGE_RATE).toFixed(2))
+    isCalculating = false
+  }
 })
 
 async function loadCategories() {
@@ -100,6 +125,7 @@ function handleAdd() {
 }
 
 function resetForm() {
+  isLoadingData = true
   form.category_id = null
   form.name_zh = ''
   form.name_en = ''
@@ -116,12 +142,14 @@ function resetForm() {
   form.sort_order = 0
   form.is_hot = 0
   form.status = 1
+  isLoadingData = false
 }
 
 function handleEdit(row: any) {
   editingId.value = row.id
   dialogTitle.value = '编辑产品'
   activeTab.value = 'basic'
+  isLoadingData = true
   form.category_id = row.category_id
   form.name_zh = row.name_i18n?.['zh-CN'] || row.name || ''
   form.name_en = row.name_i18n?.['en-US'] || row.name || ''
@@ -138,6 +166,7 @@ function handleEdit(row: any) {
   form.sort_order = row.sort_order || 0
   form.is_hot = Number(row.is_hot) || 0
   form.status = row.status !== undefined ? Number(row.status) : 1
+  isLoadingData = false
   dialogVisible.value = true
 }
 
@@ -364,6 +393,9 @@ onMounted(() => {
         </el-table-column>
         <el-table-column label="价格(USD)" width="100">
           <template #default="{ row }">${{ row.price_usd }}</template>
+        </el-table-column>
+        <el-table-column label="价格(CNY)" width="100">
+          <template #default="{ row }">¥{{ row.price_cny }}</template>
         </el-table-column>
         <el-table-column prop="stock" label="库存" width="80" />
         <el-table-column prop="moq" label="MOQ" width="80" />

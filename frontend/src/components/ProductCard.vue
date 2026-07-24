@@ -43,13 +43,14 @@ const productImage = computed(() => {
 })
 
 const formattedPrice = computed(() => {
-  const price = currencyStore.currency === 'USD'
+  const sourceCurrency = currencyStore.currency
+  const price = sourceCurrency === 'USD'
     ? props.product.price_usd
     : props.product.price_cny
   if (!price && price !== 0) {
     return '-'
   }
-  return currencyStore.format(price)
+  return currencyStore.format(price, sourceCurrency)
 })
 
 const moqText = computed(() => {

@@ -9,6 +9,7 @@ venv/
 # Vue/Node
 node_modules/
 npm-debug.log
+frontend/dist
 
 # 日志
 *.log

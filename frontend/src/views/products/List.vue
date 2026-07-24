@@ -65,13 +65,14 @@ const getProductDescription = (product: any) => {
 }
 
 const formatProductPrice = (product: any) => {
-  const price = currencyStore.currency === 'USD'
+  const sourceCurrency = currencyStore.currency
+  const price = sourceCurrency === 'USD'
     ? product.price_usd
     : product.price_cny
   if (!price && price !== 0) {
     return '-'
   }
-  return currencyStore.format(price)
+  return currencyStore.format(price, sourceCurrency)
 }
 
 const getProductImage = (product: any) => {
